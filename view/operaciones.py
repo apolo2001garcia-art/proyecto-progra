@@ -18,15 +18,14 @@ class VentanaOperaciones(ctk.CTkToplevel):
         self.agencia = agencia
         self.excel = excel
 
-       
-
+     
         ctk.CTkLabel(
             self,
             text="Rentas y Ventas",
             font=("Arial", 22, "bold")
         ).pack(pady=20)
 
-       
+      
 
         clientes = [
 
@@ -45,7 +44,7 @@ class VentanaOperaciones(ctk.CTkToplevel):
 
         self.cliente.pack(pady=5)
 
-      
+       
 
         modelos = [
 
@@ -66,7 +65,7 @@ class VentanaOperaciones(ctk.CTkToplevel):
 
         self.vehiculo.pack(pady=5)
 
-   
+        
 
         self.operacion = ctk.CTkComboBox(
             self,
@@ -79,7 +78,7 @@ class VentanaOperaciones(ctk.CTkToplevel):
 
         self.operacion.pack(pady=5)
 
-      
+       
 
         self.dias = ctk.CTkEntry(
             self,
@@ -88,7 +87,7 @@ class VentanaOperaciones(ctk.CTkToplevel):
 
         self.dias.pack(pady=5)
 
-      
+        
 
         ctk.CTkButton(
             self,
@@ -102,7 +101,22 @@ class VentanaOperaciones(ctk.CTkToplevel):
             command=self.registrar_operacion
         ).pack(pady=10)
 
-   
+    
+
+    def traer_frente(self):
+
+        self.focus()
+
+        self.lift()
+
+        self.attributes("-topmost", True)
+
+        self.after(
+            100,
+            lambda: self.attributes("-topmost", False)
+        )
+
+  
 
     def actualizar_tipo(self, opcion):
 
@@ -118,7 +132,6 @@ class VentanaOperaciones(ctk.CTkToplevel):
                 state="normal"
             )
 
-   
 
     def calcular_precio(self):
 
@@ -135,11 +148,13 @@ class VentanaOperaciones(ctk.CTkToplevel):
                 "Vehículo no encontrado"
             )
 
+            self.traer_frente()
+
             return
 
         precio_base = rzr.get_precio()
 
-    
+        
 
         if tipo_operacion == "Venta":
 
@@ -148,7 +163,9 @@ class VentanaOperaciones(ctk.CTkToplevel):
                 f"Precio de venta: ${precio_base}"
             )
 
-    
+            self.traer_frente()
+
+      
 
         elif tipo_operacion == "Renta":
 
@@ -161,6 +178,8 @@ class VentanaOperaciones(ctk.CTkToplevel):
                     "Ingresa los días"
                 )
 
+                self.traer_frente()
+
                 return
 
             try:
@@ -174,6 +193,8 @@ class VentanaOperaciones(ctk.CTkToplevel):
                     "Días inválidos"
                 )
 
+                self.traer_frente()
+
                 return
 
             if dias <= 0:
@@ -183,6 +204,8 @@ class VentanaOperaciones(ctk.CTkToplevel):
                     "Los días deben ser mayores a 0"
                 )
 
+                self.traer_frente()
+
                 return
 
             precio_renta = precio_base * 0.01 * dias
@@ -191,6 +214,9 @@ class VentanaOperaciones(ctk.CTkToplevel):
                 "Precio",
                 f"Renta por {dias} días: ${precio_renta}"
             )
+
+            self.traer_frente()
+
     
 
     def registrar_operacion(self):
@@ -199,14 +225,14 @@ class VentanaOperaciones(ctk.CTkToplevel):
         vehiculo = self.vehiculo.get()
         operacion = self.operacion.get()
 
-      
-
         if cliente == "Sin clientes":
 
             messagebox.showerror(
                 "Error",
                 "No hay clientes registrados"
             )
+
+            self.traer_frente()
 
             return
 
@@ -216,6 +242,8 @@ class VentanaOperaciones(ctk.CTkToplevel):
                 "Error",
                 "No hay vehículos registrados"
             )
+
+            self.traer_frente()
 
             return
 
@@ -228,11 +256,13 @@ class VentanaOperaciones(ctk.CTkToplevel):
                 "Vehículo no encontrado"
             )
 
+            self.traer_frente()
+
             return
 
         precio_base = rzr.get_precio()
 
-        
+      
 
         if operacion == "Venta":
 
@@ -245,15 +275,15 @@ class VentanaOperaciones(ctk.CTkToplevel):
                     "No hay unidades disponibles"
                 )
 
+                self.traer_frente()
+
                 return
 
-           
             rzr.disminuir_cantidad()
 
-          
             self.excel.actualizar_rzr(rzr)
 
-       
+    
 
         else:
 
@@ -265,6 +295,8 @@ class VentanaOperaciones(ctk.CTkToplevel):
                     "Error",
                     "Ingresa los días"
                 )
+
+                self.traer_frente()
 
                 return
 
@@ -279,11 +311,13 @@ class VentanaOperaciones(ctk.CTkToplevel):
                     "Días inválidos"
                 )
 
+                self.traer_frente()
+
                 return
 
             precio = precio_base * 0.01 * dias
 
-        
+       
 
         self.excel.guardar_operacion(
             cliente,
@@ -296,3 +330,5 @@ class VentanaOperaciones(ctk.CTkToplevel):
             "Éxito",
             "Operación registrada"
         )
+
+        self.traer_frente()
