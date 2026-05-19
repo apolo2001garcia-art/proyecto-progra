@@ -9,6 +9,9 @@ from controller.agencia import Agencia
 
 from datos.excel_manager import ExcelManager
 
+from modelo.rzr import RZR
+
+
 
 class App(ctk.CTk):
 
