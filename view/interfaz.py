@@ -7,9 +7,6 @@ from view.estadisticas import VentanaEstadisticas
 
 from controller.agencia import Agencia
 
-from modelo.rzr_utilitario import RZRUtilitario
-from modelo.rzr_deportivo import RZRDeportivo
-
 from datos.excel_manager import ExcelManager
 
 
@@ -214,7 +211,8 @@ class App(ctk.CTk):
                 self.cantidad.get()
             )
 
-            # validar modelo
+        
+
             if modelo == "":
 
                 messagebox.showerror(
@@ -224,31 +222,32 @@ class App(ctk.CTk):
 
                 return
 
+            if cantidad < 0:
+
+                messagebox.showerror(
+                    "Error",
+                    "Cantidad inválida"
+                )
+
+                return
+
             
 
-            if tipo == "Deportivo":
+            rzr = RZR(
+                modelo,
+                precio,
+                tipo,
+                cantidad
+            )
 
-                rzr = RZRDeportivo(
-                    modelo,
-                    precio,
-                    tipo,
-                    cantidad
-                )
+            
 
-            else:
-
-                rzr = RZRUtilitario(
-                    modelo,
-                    precio,
-                    tipo,
-                    cantidad
-                )
-
-          
             if self.agencia.buscar_rzr(modelo) is None:
 
+                
                 self.agencia.agregar_rzr(rzr)
 
+                
                 self.excel.guardar_rzr(rzr)
 
                 messagebox.showinfo(
@@ -264,6 +263,7 @@ class App(ctk.CTk):
                 )
 
             
+
             self.modelo.delete(0, "end")
             self.precio.delete(0, "end")
             self.cantidad.delete(0, "end")
