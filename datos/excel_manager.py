@@ -1,4 +1,3 @@
-
 from openpyxl import Workbook, load_workbook
 import os
 from modelo.rzr import RZR
@@ -14,8 +13,6 @@ class ExcelManager:
 
             wb = Workbook()
 
-           
-
             hoja = wb.active
             hoja.title = "RZR"
 
@@ -27,7 +24,6 @@ class ExcelManager:
                 "Activo"
             ])
 
-
             hoja_clientes = wb.create_sheet(
                 "Clientes"
             )
@@ -38,7 +34,6 @@ class ExcelManager:
                 "Correo"
             ])
 
-       
             hoja_operaciones = wb.create_sheet(
                 "Operaciones"
             )
@@ -52,14 +47,21 @@ class ExcelManager:
 
             wb.save(self.archivo)
 
+       
+
+        self.wb = load_workbook(self.archivo)
+
+        self.hoja_rzr = self.wb["RZR"]
+
+        self.hoja_clientes = self.wb["Clientes"]
+
+        self.hoja_operaciones = self.wb["Operaciones"]
+
+    
 
     def actualizar_rzr(self, rzr_actualizado):
 
-        wb = load_workbook(self.archivo)
-
-        hoja = wb["RZR"]
-
-        for fila in hoja.iter_rows(min_row=2):
+        for fila in self.hoja_rzr.iter_rows(min_row=2):
 
             modelo_excel = fila[0].value
 
@@ -72,17 +74,13 @@ class ExcelManager:
 
                 break
 
-        wb.save(self.archivo)
+        self.wb.save(self.archivo)
 
-   
+    
 
     def guardar_rzr(self, rzr):
 
-        wb = load_workbook(self.archivo)
-
-        hoja = wb["RZR"]
-
-        hoja.append([
+        self.hoja_rzr.append([
             rzr.get_modelo(),
             rzr.get_precio(),
             rzr.get_tipo(),
@@ -90,19 +88,15 @@ class ExcelManager:
             rzr.get_activo()
         ])
 
-        wb.save(self.archivo)
+        self.wb.save(self.archivo)
 
-  
+    
 
     def cargar_rzrs(self):
 
-        wb = load_workbook(self.archivo)
-
-        hoja = wb["RZR"]
-
         rzrs = []
 
-        for fila in hoja.iter_rows(
+        for fila in self.hoja_rzr.iter_rows(
             min_row=2,
             values_only=True
         ):
@@ -121,21 +115,17 @@ class ExcelManager:
 
         return rzrs
 
-   
+    
 
     def guardar_cliente(self, cliente):
 
-        wb = load_workbook(self.archivo)
-
-        hoja = wb["Clientes"]
-
-        hoja.append([
+        self.hoja_clientes.append([
             cliente.get_nombre(),
             cliente.get_telefono(),
             cliente.get_correo()
         ])
 
-        wb.save(self.archivo)
+        self.wb.save(self.archivo)
 
     
 
@@ -143,13 +133,9 @@ class ExcelManager:
 
         from modelo.cliente import Cliente
 
-        wb = load_workbook(self.archivo)
-
-        hoja = wb["Clientes"]
-
         clientes = []
 
-        for fila in hoja.iter_rows(
+        for fila in self.hoja_clientes.iter_rows(
             min_row=2,
             values_only=True
         ):
@@ -166,7 +152,7 @@ class ExcelManager:
 
         return clientes
 
-    
+  
 
     def guardar_operacion(
         self,
@@ -176,15 +162,11 @@ class ExcelManager:
         precio
     ):
 
-        wb = load_workbook(self.archivo)
-
-        hoja = wb["Operaciones"]
-
-        hoja.append([
+        self.hoja_operaciones.append([
             cliente,
             vehiculo,
             operacion,
             precio
         ])
 
-        wb.save(self.archivo)
+        self.wb.save(self.archivo)
