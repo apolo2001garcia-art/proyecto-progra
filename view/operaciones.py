@@ -53,6 +53,7 @@ class VentanaOperaciones(ctk.CTkToplevel):
             for r in self.agencia.obtener_rzrs()
 
             if r.get_cantidad() > 0
+            and r.get_activo()
         ]
 
         if not modelos:

@@ -33,6 +33,8 @@ class VentanaVehiculos(ctk.CTkToplevel):
             r.get_modelo()
 
             for r in self.agencia.obtener_rzrs()
+
+            if r.get_activo()
         ]
 
         if not modelos:
@@ -228,19 +230,18 @@ class VentanaVehiculos(ctk.CTkToplevel):
 
             return
 
-        modelo = self.rzr_actual.get_modelo()
-
         
 
-        self.agencia.eliminar_rzr(modelo)
+        self.rzr_actual.set_activo(False)
 
         
-
-        self.excel.eliminar_rzr(modelo)
+        self.excel.actualizar_rzr(
+            self.rzr_actual
+        )
 
         messagebox.showinfo(
             "Éxito",
-            "Vehículo eliminado"
+            "Vehículo desactivado"
         )
 
         self.destroy()

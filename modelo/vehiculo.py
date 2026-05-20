@@ -3,28 +3,28 @@ from abc import ABC, abstractmethod
 
 class Vehiculo(ABC):
 
-    def __init__(self, modelo, precio, tipo, cantidad):
+    def __init__(
+        self,
+        modelo,
+        precio,
+        disponible=True
+    ):
 
         self._modelo = modelo
         self._precio = precio
-        self._tipo = tipo
-        self._cantidad = cantidad
+        self._disponible = disponible
 
   
-
     def get_modelo(self):
         return self._modelo
 
     def get_precio(self):
         return self._precio
 
-    def get_tipo(self):
-        return self._tipo
+    def get_disponible(self):
+        return self._disponible
 
-    def get_cantidad(self):
-        return self._cantidad
-
-  
+ 
 
     def set_modelo(self, modelo):
         self._modelo = modelo
@@ -32,13 +32,10 @@ class Vehiculo(ABC):
     def set_precio(self, precio):
         self._precio = precio
 
-    def set_tipo(self, tipo):
-        self._tipo = tipo
+    def set_disponible(self, disponible):
+        self._disponible = disponible
 
-    def set_cantidad(self, cantidad):
-        self._cantidad = cantidad
 
-  
     @abstractmethod
     def calcular_precio(self):
         pass
